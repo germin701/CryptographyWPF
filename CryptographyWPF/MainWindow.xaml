@@ -1,0 +1,32 @@
+﻿<Window x:Class="CryptographyWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CryptographyWPF"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="300" Width="480">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBox x:Name="InputTextBox" Grid.Row="0" Margin="10" Width="400" Height="30"/>
+
+        <TextBox x:Name="OutputTextBox" Grid.Row="1" Margin="10" Width="400" Height="30"  IsReadOnly="True"/>
+
+        <Button x:Name="EncryptAesButton" Content="Encrypt (AES)" Grid.Row="2" Margin="112,10,258,10" Width="80" Height="30" Click="EncryptAesButton_Click"/>
+        <Button x:Name="DecryptAesButton" Content="Decrypt (AES)" Grid.Row="2" Margin="258,10,112,10" Width="80" Height="30" Click="DecryptAesButton_Click"/>
+
+        <Button x:Name="EncryptDesButton" Content="Encrypt (DES)" Grid.Row="3" Margin="112,10,258,10" Width="80" Height="30" Click="EncryptDesButton_Click" RenderTransformOrigin="-1.523,0.698"/>
+        <Button x:Name="DecryptDesButton" Content="Decrypt (DES)" Grid.Row="3" Margin="258,10,112,10" Width="80" Height="30" Click="DecryptDesButton_Click"/>
+
+        <Button x:Name="EncryptTripleDesButton" Content="Encrypt (Triple DES)" Grid.Row="4" Margin="87,10,233,10" Width="130" Height="30" Click="EncryptTripleDesButton_Click"/>
+        <Button x:Name="DecryptTripleDesButton" Content="Decrypt (Triple DES)" Grid.Row="4" Margin="233,10,87,10" Width="130" Height="30" Click="DecryptTripleDesButton_Click"/>
+    </Grid>
+</Window>
