@@ -20,3 +20,5 @@ C:\Users\User\OneDrive - student.newinti.edu.my\Desktop\INTI BCSCUN\Sem8 Interns
 C:\Users\User\OneDrive - student.newinti.edu.my\Desktop\INTI BCSCUN\Sem8 Internship\.NET Core Desktop App\CryptographyWPF\CryptographyWPF\obj\Debug\net5.0-windows\ref\CryptographyWPF.dll
 C:\Users\User\OneDrive - student.newinti.edu.my\Desktop\INTI BCSCUN\Sem8 Internship\.NET Core Desktop App\CryptographyWPF\CryptographyWPF\obj\Debug\net5.0-windows\CryptographyWPF.pdb
 C:\Users\User\OneDrive - student.newinti.edu.my\Desktop\INTI BCSCUN\Sem8 Internship\.NET Core Desktop App\CryptographyWPF\CryptographyWPF\obj\Debug\net5.0-windows\CryptographyWPF.genruntimeconfig.cache
+C:\Users\User\OneDrive - student.newinti.edu.my\Desktop\INTI BCSCUN\Sem8 Internship\.NET Core Desktop App\CryptographyWPF\CryptographyWPF\bin\Debug\net5.0-windows\Gu.Wpf.Adorners.dll
+C:\Users\User\OneDrive - student.newinti.edu.my\Desktop\INTI BCSCUN\Sem8 Internship\.NET Core Desktop App\CryptographyWPF\CryptographyWPF\obj\Debug\net5.0-windows\CryptographyWPF.csproj.CopyComplete

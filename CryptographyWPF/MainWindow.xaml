@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CryptographyWPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="300" Width="480">
+        Title="MainWindow" Height="900" Width="540">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -14,19 +14,47 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+        <Label Content="Demostration of AES, DES, TDES" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="13" Grid.Row="0" Height="26" Margin="0,0,0,50" Grid.RowSpan="2"></Label>
 
-        <TextBox x:Name="InputTextBox" Grid.Row="0" Margin="10" Width="400" Height="30"/>
+        <TextBox x:Name="InputTextBox" Grid.Row="1" Margin="40,36,260,10" Width="210" Height="30" LostFocus="InputTextBox_LostFocus"/>
+        <TextBox x:Name="WatermarkInputTB" Grid.Row="1" Margin="40,36,260,10" Width="210" Height="30" Text="Write something here..." Foreground="DarkGray" GotFocus="WatermarkInputTB_GotFocus"/>
+        <TextBox x:Name="KeyTextBox" Grid.Row="1" Margin="270,36,30,10" Width="210" Height="30" LostFocus="KeyTextBox_LostFocus"/>
+        <TextBox x:Name="WatermarkKeyTB" Grid.Row="1" Margin="270,36,30,10" Width="210" Height="30" Text="Write your key..." Foreground="DarkGray" GotFocus="WatermarkKeyTB_GotFocus"/>
 
-        <TextBox x:Name="OutputTextBox" Grid.Row="1" Margin="10" Width="400" Height="30"  IsReadOnly="True"/>
+        <TextBox x:Name="OutputTextBox" Grid.Row="2" Margin="10" Width="400" Height="30" IsReadOnly="True" Text="Result" Foreground="DarkGray"/>
 
-        <Button x:Name="EncryptAesButton" Content="Encrypt (AES)" Grid.Row="2" Margin="112,10,258,10" Width="80" Height="30" Click="EncryptAesButton_Click"/>
-        <Button x:Name="DecryptAesButton" Content="Decrypt (AES)" Grid.Row="2" Margin="258,10,112,10" Width="80" Height="30" Click="DecryptAesButton_Click"/>
+        <Button x:Name="EncryptAesButton" Content="Encrypt (AES)" Grid.Row="3" Margin="112,10,258,10" Width="80" Height="30" Click="EncryptAesButton_Click"/>
+        <Button x:Name="DecryptAesButton" Content="Decrypt (AES)" Grid.Row="3" Margin="258,10,112,10" Width="80" Height="30" Click="DecryptAesButton_Click"/>
 
-        <Button x:Name="EncryptDesButton" Content="Encrypt (DES)" Grid.Row="3" Margin="112,10,258,10" Width="80" Height="30" Click="EncryptDesButton_Click" RenderTransformOrigin="-1.523,0.698"/>
-        <Button x:Name="DecryptDesButton" Content="Decrypt (DES)" Grid.Row="3" Margin="258,10,112,10" Width="80" Height="30" Click="DecryptDesButton_Click"/>
+        <Button x:Name="EncryptDesButton" Content="Encrypt (DES)" Grid.Row="4" Margin="112,10,258,10" Width="80" Height="30" Click="EncryptDesButton_Click" RenderTransformOrigin="-1.523,0.698"/>
+        <Button x:Name="DecryptDesButton" Content="Decrypt (DES)" Grid.Row="4" Margin="258,10,112,10" Width="80" Height="30" Click="DecryptDesButton_Click"/>
 
-        <Button x:Name="EncryptTripleDesButton" Content="Encrypt (Triple DES)" Grid.Row="4" Margin="87,10,233,10" Width="130" Height="30" Click="EncryptTripleDesButton_Click"/>
-        <Button x:Name="DecryptTripleDesButton" Content="Decrypt (Triple DES)" Grid.Row="4" Margin="233,10,87,10" Width="130" Height="30" Click="DecryptTripleDesButton_Click"/>
+        <Button x:Name="EncryptTripleDesButton" Content="Encrypt (Triple DES)" Grid.Row="5" Margin="87,10,233,10" Width="130" Height="30" Click="EncryptTripleDesButton_Click"/>
+        <Button x:Name="DecryptTripleDesButton" Content="Decrypt (Triple DES)" Grid.Row="5" Margin="233,10,87,10" Width="130" Height="30" Click="DecryptTripleDesButton_Click"/>
+
+        <TextBox x:Name="InputTextBoxTDES" Grid.Row="6" Margin="17,10,163,10" Width="300" Height="30"/>
+        <Button x:Name="FirstEncryptButton" Content="1st Encrypt (Triple DES)" Grid.Row="6" Width="130" Height="30" Click="FirstEncryptButton_Click" Margin="331,10,19,10"/>
+
+        <TextBox x:Name="FirstCipherTextBox" Grid.Row="7" Margin="17,10,163,10" Width="300" Height="30" IsReadOnly="True"/>
+        <Button x:Name="FirstDecryptcryptButton" Content="1st Decrypt (Triple DES)" Grid.Row="7" Width="130" Height="30" Click="FirstDecryptButton_Click" Margin="331,10,19,10"/>
+
+        <TextBox x:Name="SecondCipherTextBox" Grid.Row="8" Margin="17,10,163,10" Width="300" Height="30" IsReadOnly="True"/>
+        <Button x:Name="SecondEncryptButton" Content="2nd Encrypt (Triple DES)" Grid.Row="8" Width="130" Height="30" Click="SecondEncryptButton_Click" Margin="331,10,19,10"/>
+
+        <TextBox x:Name="FirstResultTextBox" Grid.Row="9" Margin="17,10,163,10" Width="300" Height="30" IsReadOnly="True"/>
+        <Button x:Name="SecondDecryptButton" Content="2nd Decrypt (Triple DES)" Grid.Row="9" Width="130" Height="30" Click="SecondDecryptButton_Click" Margin="331,10,19,10"/>
+
+        <TextBox x:Name="SecondResultTextBox" Grid.Row="10" Margin="17,10,163,10" Width="300" Height="30" IsReadOnly="True"/>
+        <Button x:Name="ThirdEncryptcryptButton" Content="3rd Encrypt (Triple DES)" Grid.Row="10" Width="130" Height="30" Click="ThirdEncryptButton_Click" Margin="331,10,19,10"/>
+
+        <TextBox x:Name="ThirdResultTextBox" Grid.Row="11" Margin="17,10,163,10" Width="300" Height="30" IsReadOnly="True"/>
+        <Button x:Name="ThirdDecryptButton" Content="3rd Decrypt (Triple DES)" Grid.Row="11" Width="130" Height="30" Click="ThirdDecryptButton_Click" Margin="331,10,19,10"/>
     </Grid>
 </Window>

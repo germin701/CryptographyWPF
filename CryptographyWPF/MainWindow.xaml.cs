@@ -45,6 +45,7 @@ namespace CryptographyWPF
 
             // Display the encrypted data in hexadecimal without hyphens
             OutputTextBox.Text = BitConverter.ToString(encryptedData).Replace("-", "");
+            OutputTextBox.Foreground = new SolidColorBrush(Colors.Black);
         }
 
         private void DecryptAesButton_Click(object sender, RoutedEventArgs e)
@@ -73,6 +74,7 @@ namespace CryptographyWPF
 
             // Display the encrypted data in hexadecimal without hyphens
             OutputTextBox.Text = BitConverter.ToString(encryptedData).Replace("-", "");
+            OutputTextBox.Foreground = new SolidColorBrush(Colors.Black);
         }
 
         private void DecryptDesButton_Click(object sender, RoutedEventArgs e)
@@ -104,6 +106,7 @@ namespace CryptographyWPF
 
             // Display the encrypted data in hexadecimal without hyphens
             OutputTextBox.Text = BitConverter.ToString(encryptedData).Replace("-", "");
+            OutputTextBox.Foreground = new SolidColorBrush(Colors.Black);
         }
 
         private void DecryptTripleDesButton_Click(object sender, RoutedEventArgs e)
@@ -399,6 +402,64 @@ namespace CryptographyWPF
 
             // Convert the final result from byte array to UTF-8 string
             return Encoding.UTF8.GetString(decryptedData1);
+        }
+
+        private void FirstEncryptButton_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void FirstDecryptButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void SecondEncryptButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void SecondDecryptButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void ThirdEncryptButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void ThirdDecryptButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void InputTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(InputTextBox.Text))
+            {
+                InputTextBox.Visibility = System.Windows.Visibility.Collapsed;
+                WatermarkInputTB.Visibility = System.Windows.Visibility.Visible;
+            }
+        }
+
+        private void WatermarkInputTB_GotFocus(object sender, RoutedEventArgs e)
+        {
+            WatermarkInputTB.Visibility = System.Windows.Visibility.Collapsed;
+            InputTextBox.Visibility = System.Windows.Visibility.Visible;
+            InputTextBox.Focus();
+        }
+
+        private void KeyTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(WatermarkKeyTB.Text))
+            {
+                KeyTextBox.Visibility = System.Windows.Visibility.Collapsed;
+                WatermarkKeyTB.Visibility = System.Windows.Visibility.Visible;
+            }
+        }
+
+        private void WatermarkKeyTB_GotFocus(object sender, RoutedEventArgs e)
+        {
+            WatermarkKeyTB.Visibility = System.Windows.Visibility.Collapsed;
+            KeyTextBox.Visibility = System.Windows.Visibility.Visible;
+            KeyTextBox.Focus();
         }
     }
 }
