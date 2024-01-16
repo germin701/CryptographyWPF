@@ -1,42 +1,11 @@
 {
   "version": 3,
   "targets": {
-    "net5.0-windows7.0": {
-      "Gu.Wpf.Adorners/2.1.1": {
-        "type": "package",
-        "compile": {
-          "lib/netcoreapp3.1/Gu.Wpf.Adorners.dll": {}
-        },
-        "runtime": {
-          "lib/netcoreapp3.1/Gu.Wpf.Adorners.dll": {}
-        },
-        "frameworkReferences": [
-          "Microsoft.WindowsDesktop.App.WPF"
-        ]
-      }
-    }
+    "net5.0-windows7.0": {}
   },
-  "libraries": {
-    "Gu.Wpf.Adorners/2.1.1": {
-      "sha512": "CAwRRcQxEm+x7shkUxg3qCvTZV6BJ/7ImcGusQSVPK+uBtVfn5wt1kBsv0xr0Fc31z4nXElhUfcRrwJUyhqKCA==",
-      "type": "package",
-      "path": "gu.wpf.adorners/2.1.1",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "gu.wpf.adorners.2.1.1.nupkg.sha512",
-        "gu.wpf.adorners.nuspec",
-        "lib/net45/Gu.Wpf.Adorners.dll",
-        "lib/net45/Gu.Wpf.Adorners.xml",
-        "lib/netcoreapp3.1/Gu.Wpf.Adorners.dll",
-        "lib/netcoreapp3.1/Gu.Wpf.Adorners.xml"
-      ]
-    }
-  },
+  "libraries": {},
   "projectFileDependencyGroups": {
-    "net5.0-windows7.0": [
-      "Gu.Wpf.Adorners >= 2.1.1"
-    ]
+    "net5.0-windows7.0": []
   },
   "packageFolders": {
     "C:\\Users\\User\\.nuget\\packages\\": {}
@@ -76,12 +45,6 @@
     "frameworks": {
       "net5.0-windows7.0": {
         "targetAlias": "net5.0-windows",
-        "dependencies": {
-          "Gu.Wpf.Adorners": {
-            "target": "Package",
-            "version": "[2.1.1, )"
-          }
-        },
         "imports": [
           "net461",
           "net462",
