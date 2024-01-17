@@ -19,14 +19,11 @@ namespace CryptographyWPF
 {
     public partial class MainWindow : Window
     {
-        private static readonly byte[] AesKey = Encoding.UTF8.GetBytes("1234567890123456");  // 128 bits (16 bytes)
         private static readonly byte[] AesIV = Encoding.UTF8.GetBytes("9876543210987654");  // 128 bits (16 bytes)
-
-        private static readonly byte[] DesKey = Encoding.UTF8.GetBytes("87654321");  // 64 bits (8 bytes)
         private static readonly byte[] DesIV = Encoding.UTF8.GetBytes("12345678");  // 64 bits (8 bytes)
-
-        private static readonly byte[] TripleDesKey = Encoding.UTF8.GetBytes("ABCDEF1234567890VWXYZ123");  // 192 bits (24 bytes)
         private static readonly byte[] TripleDesIV = Encoding.UTF8.GetBytes("87654321");  // 64 bits (8 bytes)
+
+        private byte[] Key;
 
         public MainWindow()
         {
@@ -36,12 +33,13 @@ namespace CryptographyWPF
         private void EncryptAesButton_Click(object sender, RoutedEventArgs e)
         {
             string plainText = InputTextBox.Text;
+            Key = Encoding.UTF8.GetBytes(KeyTextBox.Text);
 
             // Convert the user input to hexadecimal
             string hexPlainText = ConvertStringToHex(plainText);
 
             // Encrypt the hexadecimal representation
-            byte[] encryptedData = EncryptAes(hexPlainText, AesKey, AesIV);
+            byte[] encryptedData = EncryptAes(hexPlainText, Key, AesIV);
 
             // Display the encrypted data in hexadecimal without hyphens
             OutputTextBox.Text = BitConverter.ToString(encryptedData).Replace("-", "");
@@ -54,7 +52,7 @@ namespace CryptographyWPF
 
             // Convert the hexadecimal input to byte array and decrypt
             byte[] encryptedData = ConvertHexStringToByteArray(cipherText);
-            string decryptedText = DecryptAes(encryptedData, AesKey, AesIV);
+            string decryptedText = DecryptAes(encryptedData, Key, AesIV);
 
             // Convert ASCII codes to characters
             string plainText = ConvertHexToAscii(decryptedText);
@@ -66,11 +64,12 @@ namespace CryptographyWPF
         private void EncryptDesButton_Click(object sender, RoutedEventArgs e)
         {
             string plainText = InputTextBox.Text;
+            Key = Encoding.UTF8.GetBytes(KeyTextBox.Text);
 
             // Convert the user input to hexadecimal
             string hexPlainText = ConvertStringToHex(plainText);
 
-            byte[] encryptedData = EncryptDes(hexPlainText, DesKey, DesIV);
+            byte[] encryptedData = EncryptDes(hexPlainText, Key, DesIV);
 
             // Display the encrypted data in hexadecimal without hyphens
             OutputTextBox.Text = BitConverter.ToString(encryptedData).Replace("-", "");
@@ -83,7 +82,7 @@ namespace CryptographyWPF
 
             // Convert the hexadecimal input to byte array and decrypt
             byte[] encryptedData = ConvertHexStringToByteArray(cipherText);
-            byte[] decryptedData = DecryptDes(encryptedData, DesKey, DesIV);
+            byte[] decryptedData = DecryptDes(encryptedData, Key, DesIV);
             string decryptedText = Encoding.UTF8.GetString(decryptedData);
 
             // Convert ASCII codes to characters
@@ -96,13 +95,14 @@ namespace CryptographyWPF
         private void EncryptTripleDesButton_Click(object sender, RoutedEventArgs e)
         {
             string plainText = InputTextBox.Text;
+            Key = Encoding.UTF8.GetBytes(KeyTextBox.Text);
 
             // Convert the user input to hexadecimal
             string hexPlainText = ConvertStringToHex(plainText);
 
             // Encrypt the hexadecimal representation
-            //byte[] encryptedData = EncryptTripleDes(hexPlainText, TripleDesKey, TripleDesIV);
-            byte[] encryptedData = EncryptTripleDesManually(hexPlainText, DesKey, DesIV);
+            byte[] encryptedData = EncryptTripleDes(hexPlainText, Key, TripleDesIV);
+            //byte[] encryptedData = EncryptTripleDesManually(hexPlainText, Key, DesIV);
 
             // Display the encrypted data in hexadecimal without hyphens
             OutputTextBox.Text = BitConverter.ToString(encryptedData).Replace("-", "");
@@ -115,8 +115,8 @@ namespace CryptographyWPF
 
             // Convert the hexadecimal input to byte array and decrypt
             byte[] encryptedData = ConvertHexStringToByteArray(cipherText);
-            //string decryptedText = DecryptTripleDes(encryptedData, TripleDesKey, TripleDesIV);
-            string decryptedText = DecryptTripleDesManually(encryptedData, DesKey, DesIV);
+            string decryptedText = DecryptTripleDes(encryptedData, Key, TripleDesIV);
+            //string decryptedText = DecryptTripleDesManually(encryptedData, Key, DesIV);
 
             // Convert ASCII codes to characters
             string plainText = ConvertHexToAscii(decryptedText);
@@ -330,136 +330,195 @@ namespace CryptographyWPF
             }
         }
 
-        private byte[] EncryptTripleDesManually(string plainText, byte[] key, byte[] iv)
-        {
-            byte[] encryptedBytes, encryptedBytes2, encryptedBytes3;
-            // First encrypt using DES
-            using (DESCryptoServiceProvider desAlg = new DESCryptoServiceProvider())
-            {
-                desAlg.Key = key;
-                desAlg.IV = iv;
-
-                ICryptoTransform encryptor = desAlg.CreateEncryptor(desAlg.Key, desAlg.IV);
-
-                byte[] plainBytes = Encoding.UTF8.GetBytes(plainText);
-
-                using (MemoryStream msEncrypt = new MemoryStream())
-                {
-                    using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
-                    {
-                        csEncrypt.Write(plainBytes, 0, plainBytes.Length);
-                    }
-                    encryptedBytes = msEncrypt.ToArray();
-                }
-            }
-            // Second encrypt using DES
-            using (DESCryptoServiceProvider desAlg = new DESCryptoServiceProvider())
-            {
-                desAlg.Key = key;
-                desAlg.IV = iv;
-
-                ICryptoTransform encryptor = desAlg.CreateEncryptor(desAlg.Key, desAlg.IV);
-
-                using (MemoryStream msEncrypt = new MemoryStream())
-                {
-                    using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
-                    {
-                        csEncrypt.Write(encryptedBytes, 0, encryptedBytes.Length);
-                    }
-                    encryptedBytes2 = msEncrypt.ToArray();
-                }
-            }
-            // Third encrypt using DES
-            using (DESCryptoServiceProvider desAlg = new DESCryptoServiceProvider())
-            {
-                desAlg.Key = key;
-                desAlg.IV = iv;
-
-                ICryptoTransform encryptor = desAlg.CreateEncryptor(desAlg.Key, desAlg.IV);
-
-                using (MemoryStream msEncrypt = new MemoryStream())
-                {
-                    using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
-                    {
-                        csEncrypt.Write(encryptedBytes2, 0, encryptedBytes2.Length);
-                    }
-                    encryptedBytes3 = msEncrypt.ToArray();
-                }
-            }
-            return encryptedBytes3;
-        }
-
-        private string DecryptTripleDesManually(byte[] cipherText, byte[] key, byte[] iv)
-        {
-            // First decrypt by DES
-            byte[] decryptedData3 = DecryptDes(cipherText, key, iv);
-
-            // Second decrypt by DES
-            byte[] decryptedData2 = DecryptDes(decryptedData3, key, iv);
-
-            // Third decrypt by DES
-            byte[] decryptedData1 = DecryptDes(decryptedData2, key, iv);
-
-            // Convert the final result from byte array to UTF-8 string
-            return Encoding.UTF8.GetString(decryptedData1);
-        }
-
         private void FirstEncryptButton_Click(object sender, RoutedEventArgs e)
         {
-            
+            string plainText = InputTextBoxTDES.Text;
+            Key = Encoding.UTF8.GetBytes(KeyTextBoxTDES.Text);
+
+            // Convert the user input to hexadecimal
+            string hexPlainText = ConvertStringToHex(plainText);
+
+            byte[] encryptedData = EncryptDes(hexPlainText, Key, DesIV);
+
+            // Display the encrypted data in hexadecimal without hyphens
+            FirstCipherTextBox.Text = BitConverter.ToString(encryptedData).Replace("-", "");
+            FirstCipherTextBox.Foreground = new SolidColorBrush(Colors.Black);
         }
 
         private void FirstDecryptButton_Click(object sender, RoutedEventArgs e)
         {
+            string cipherText = FirstCipherTextBox.Text;
 
+            // Convert the hexadecimal input to byte array and decrypt
+            byte[] encryptedData = ConvertHexStringToByteArray(cipherText);
+            byte[] decryptedData = DecryptDes(encryptedData, Key, DesIV);
+            string decryptedText = Encoding.UTF8.GetString(decryptedData);
+
+            // Convert ASCII codes to characters
+            string plainText = ConvertHexToAscii(decryptedText);
+
+            // Display the decrypted text
+            SecondCipherTextBox.Text = plainText;
+            SecondCipherTextBox.Foreground = new SolidColorBrush(Colors.Black);
         }
+
         private void SecondEncryptButton_Click(object sender, RoutedEventArgs e)
         {
+            string plainText = SecondCipherTextBox.Text;
 
+            // Convert the user input to hexadecimal
+            string hexPlainText = ConvertStringToHex(plainText);
+
+            byte[] encryptedData = EncryptDes(hexPlainText, Key, DesIV);
+
+            // Display the encrypted data in hexadecimal without hyphens
+            ThirdCipherTextBox.Text = BitConverter.ToString(encryptedData).Replace("-", "");
+            ThirdCipherTextBox.Foreground = new SolidColorBrush(Colors.Black);
         }
+
         private void SecondDecryptButton_Click(object sender, RoutedEventArgs e)
         {
+            string cipherText = CipherTextBoxTDES.Text;
+            Key = Encoding.UTF8.GetBytes(KeyTextBoxTDES2.Text);
 
+            // Convert the hexadecimal input to byte array and decrypt
+            byte[] encryptedData = ConvertHexStringToByteArray(cipherText);
+            byte[] decryptedData = DecryptDes(encryptedData, Key, DesIV);
+            string decryptedText = Encoding.UTF8.GetString(decryptedData);
+
+            // Convert ASCII codes to characters
+            string plainText = ConvertHexToAscii(decryptedText);
+
+            // Display the decrypted text
+            FirstResultTextBox.Text = plainText;
+            FirstResultTextBox.Foreground = new SolidColorBrush(Colors.Black);
         }
+
         private void ThirdEncryptButton_Click(object sender, RoutedEventArgs e)
         {
+            string plainText = FirstResultTextBox.Text;
 
+            // Convert the user input to hexadecimal
+            string hexPlainText = ConvertStringToHex(plainText);
+
+            byte[] encryptedData = EncryptDes(hexPlainText, Key, DesIV);
+
+            // Display the encrypted data in hexadecimal without hyphens
+            SecondResultTextBox.Text = BitConverter.ToString(encryptedData).Replace("-", "");
+            SecondResultTextBox.Foreground = new SolidColorBrush(Colors.Black);
         }
+
         private void ThirdDecryptButton_Click(object sender, RoutedEventArgs e)
         {
+            string cipherText = SecondResultTextBox.Text;
 
+            // Convert the hexadecimal input to byte array and decrypt
+            byte[] encryptedData = ConvertHexStringToByteArray(cipherText);
+            byte[] decryptedData = DecryptDes(encryptedData, Key, DesIV);
+            string decryptedText = Encoding.UTF8.GetString(decryptedData);
+
+            // Convert ASCII codes to characters
+            string plainText = ConvertHexToAscii(decryptedText);
+
+            // Display the decrypted text
+            ThirdResultTextBox.Text = plainText;
+            ThirdResultTextBox.Foreground = new SolidColorBrush(Colors.Black);
         }
 
         private void InputTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(InputTextBox.Text))
             {
-                InputTextBox.Visibility = System.Windows.Visibility.Collapsed;
-                WatermarkInputTB.Visibility = System.Windows.Visibility.Visible;
+                InputTextBox.Visibility = Visibility.Collapsed;
+                WatermarkInputTB.Visibility = Visibility.Visible;
             }
         }
 
         private void WatermarkInputTB_GotFocus(object sender, RoutedEventArgs e)
         {
-            WatermarkInputTB.Visibility = System.Windows.Visibility.Collapsed;
-            InputTextBox.Visibility = System.Windows.Visibility.Visible;
+            WatermarkInputTB.Visibility = Visibility.Collapsed;
+            InputTextBox.Visibility = Visibility.Visible;
             InputTextBox.Focus();
         }
 
         private void KeyTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(WatermarkKeyTB.Text))
+            if (string.IsNullOrEmpty(KeyTextBox.Text))
             {
-                KeyTextBox.Visibility = System.Windows.Visibility.Collapsed;
-                WatermarkKeyTB.Visibility = System.Windows.Visibility.Visible;
+                KeyTextBox.Visibility = Visibility.Collapsed;
+                WatermarkKeyTB.Visibility = Visibility.Visible;
             }
         }
 
         private void WatermarkKeyTB_GotFocus(object sender, RoutedEventArgs e)
         {
-            WatermarkKeyTB.Visibility = System.Windows.Visibility.Collapsed;
-            KeyTextBox.Visibility = System.Windows.Visibility.Visible;
+            WatermarkKeyTB.Visibility = Visibility.Collapsed;
+            KeyTextBox.Visibility = Visibility.Visible;
             KeyTextBox.Focus();
+        }
+
+        private void InputTextBoxTDES_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(InputTextBoxTDES.Text))
+            {
+                InputTextBoxTDES.Visibility = Visibility.Collapsed;
+                WatermarkInputTBTDES.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void WatermarkInputTBTDES_GotFocus(object sender, RoutedEventArgs e)
+        {
+            WatermarkInputTBTDES.Visibility = Visibility.Collapsed;
+            InputTextBoxTDES.Visibility = Visibility.Visible;
+            InputTextBoxTDES.Focus();
+        }
+
+        private void KeyTextBoxTDES_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(KeyTextBoxTDES.Text))
+            {
+                KeyTextBoxTDES.Visibility = Visibility.Collapsed;
+                WatermarkKeyTBTDES.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void WatermarkKeyTBTDES_GotFocus(object sender, RoutedEventArgs e)
+        {
+            WatermarkKeyTBTDES.Visibility = Visibility.Collapsed;
+            KeyTextBoxTDES.Visibility = Visibility.Visible;
+            KeyTextBoxTDES.Focus();
+        }
+
+        private void CipherTextBoxTDES_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(CipherTextBoxTDES.Text))
+            {
+                CipherTextBoxTDES.Visibility = Visibility.Collapsed;
+                WatermarkCipherTBTDES.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void WatermarkCipherTBTDES_GotFocus(object sender, RoutedEventArgs e)
+        {
+            WatermarkCipherTBTDES.Visibility = Visibility.Collapsed;
+            CipherTextBoxTDES.Visibility = Visibility.Visible;
+            CipherTextBoxTDES.Focus();
+        }
+
+        private void KeyTextBoxTDES2_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(KeyTextBoxTDES2.Text))
+            {
+                KeyTextBoxTDES2.Visibility = Visibility.Collapsed;
+                WatermarkKeyTBTDES2.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void WatermarkKeyTBTDES2_GotFocus(object sender, RoutedEventArgs e)
+        {
+            WatermarkKeyTBTDES2.Visibility = Visibility.Collapsed;
+            KeyTextBoxTDES2.Visibility = Visibility.Visible;
+            KeyTextBoxTDES2.Focus();
         }
     }
 }
