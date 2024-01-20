@@ -55,13 +55,13 @@
             <TextBox x:Name="WatermarkInputTBTDES" Grid.Row="8" Margin="50,10,310,10" Width="210" Height="30" Text="Write something here..." Foreground="DarkGray" GotFocus="WatermarkInputTBTDES_GotFocus"/>
             <TextBox x:Name="KeyTextBoxTDES" Grid.Row="8" Margin="280,10,140,10" Width="150" Height="30" LostFocus="KeyTextBoxTDES_LostFocus"/>
             <TextBox x:Name="WatermarkKeyTBTDES" Grid.Row="8" Margin="280,10,140,10" Width="150" Height="30" Text="Write your key..." Foreground="DarkGray" GotFocus="WatermarkKeyTBTDES_GotFocus"/>
-            <Button x:Name="FirstEncryptButton" Content="1st Encrypt" Grid.Row="8" Width="75" Height="30" Click="FirstEncryptButton_Click" Margin="450,10,45,10"/>
+            <Button x:Name="FirstEncryptButton" Content="K1 Encrypt" Grid.Row="8" Width="75" Height="30" Click="FirstEncryptButton_Click" Margin="450,10,45,10"/>
 
             <TextBox x:Name="FirstCipherTextBox" Grid.Row="9" Margin="75,10,160,10" Width="320" Height="30" IsReadOnly="True" Text="First Cipher Text" Foreground="DarkGray"/>
-            <Button x:Name="FirstDecryptcryptButton" Content="1st Decrypt" Grid.Row="9" Width="75" Height="30" Click="FirstDecryptButton_Click" Margin="406,10,74,10"/>
+            <Button x:Name="FirstDecryptcryptButton" Content="K2 Decrypt" Grid.Row="9" Width="75" Height="30" Click="FirstDecryptButton_Click" Margin="406,10,74,10"/>
 
             <TextBox x:Name="SecondCipherTextBox" Grid.Row="10" Margin="75,10,160,10" Width="320" Height="30" IsReadOnly="True" Text="Second Cipher Text" Foreground="DarkGray"/>
-            <Button x:Name="SecondEncryptButton" Content="2nd Encrypt" Grid.Row="10" Width="75" Height="30" Click="SecondEncryptButton_Click" Margin="406,10,74,10"/>
+            <Button x:Name="SecondEncryptButton" Content="K3 Encrypt" Grid.Row="10" Width="75" Height="30" Click="SecondEncryptButton_Click" Margin="406,10,74,10"/>
 
             <TextBox x:Name="ThirdCipherTextBox" Grid.Row="11" Margin="75,10,160,10" Width="320" Height="30" IsReadOnly="True" Text="Third Cipher Text" Foreground="DarkGray"/>
 
@@ -71,13 +71,13 @@
             <TextBox x:Name="WatermarkCipherTBTDES" Grid.Row="13" Margin="50,10,310,10" Width="210" Height="30" Text="Write cipher text here..." Foreground="DarkGray" GotFocus="WatermarkCipherTBTDES_GotFocus"/>
             <TextBox x:Name="KeyTextBoxTDES2" Grid.Row="13" Margin="280,10,140,10" Width="150" Height="30" LostFocus="KeyTextBoxTDES2_LostFocus"/>
             <TextBox x:Name="WatermarkKeyTBTDES2" Grid.Row="13" Margin="280,10,140,10" Width="150" Height="30" Text="Write your key..." Foreground="DarkGray" GotFocus="WatermarkKeyTBTDES2_GotFocus"/>
-            <Button x:Name="SecondDecryptButton" Content="2nd Decrypt" Grid.Row="13" Width="75" Height="30" Click="SecondDecryptButton_Click" Margin="450,10,45,10"/>
+            <Button x:Name="SecondDecryptButton" Content="K3 Decrypt" Grid.Row="13" Width="75" Height="30" Click="SecondDecryptButton_Click" Margin="450,10,45,10"/>
 
             <TextBox x:Name="FirstResultTextBox" Grid.Row="14" Margin="75,10,160,10" Width="320" Height="30" IsReadOnly="True" Text="First Result" Foreground="DarkGray"/>
-            <Button x:Name="ThirdEncryptcryptButton" Content="3rd Encrypt" Grid.Row="14" Width="75" Height="30" Click="ThirdEncryptButton_Click" Margin="406,10,74,10"/>
+            <Button x:Name="ThirdEncryptcryptButton" Content="K2 Encrypt" Grid.Row="14" Width="75" Height="30" Click="ThirdEncryptButton_Click" Margin="406,10,74,10"/>
 
             <TextBox x:Name="SecondResultTextBox" Grid.Row="15" Margin="75,10,160,10" Width="320" Height="30" IsReadOnly="True" Text="Second Result" Foreground="DarkGray"/>
-            <Button x:Name="ThirdDecryptButton" Content="3rd Decrypt" Grid.Row="15" Width="75" Height="30" Click="ThirdDecryptButton_Click" Margin="406,10,74,10"/>
+            <Button x:Name="ThirdDecryptButton" Content="K1 Decrypt" Grid.Row="15" Width="75" Height="30" Click="ThirdDecryptButton_Click" Margin="406,10,74,10"/>
 
             <TextBox x:Name="ThirdResultTextBox" Grid.Row="16" Margin="75,10,160,10" Width="320" Height="30" IsReadOnly="True" Text="Original Plain Text" Foreground="DarkGray"/>
         </Grid>

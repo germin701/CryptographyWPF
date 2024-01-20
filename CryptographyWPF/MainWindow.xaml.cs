@@ -23,7 +23,7 @@ namespace CryptographyWPF
         private static readonly byte[] DesIV = Encoding.UTF8.GetBytes("12345678");  // 64 bits (8 bytes)
         private static readonly byte[] TripleDesIV = Encoding.UTF8.GetBytes("87654321");  // 64 bits (8 bytes)
 
-        private byte[] Key;
+        private byte[] Key, Key1, Key2, Key3;
 
         public MainWindow()
         {
@@ -34,12 +34,7 @@ namespace CryptographyWPF
         {
             string plainText = InputTextBox.Text;
             Key = Encoding.UTF8.GetBytes(KeyTextBox.Text);
-
-            // Convert the user input to hexadecimal
-            string hexPlainText = ConvertStringToHex(plainText);
-
-            // Encrypt the hexadecimal representation
-            byte[] encryptedData = EncryptAes(hexPlainText, Key, AesIV);
+            byte[] encryptedData = EncryptAes(plainText, Key, AesIV);
 
             // Display the encrypted data in hexadecimal without hyphens
             OutputTextBox.Text = BitConverter.ToString(encryptedData).Replace("-", "");
@@ -49,27 +44,22 @@ namespace CryptographyWPF
         private void DecryptAesButton_Click(object sender, RoutedEventArgs e)
         {
             string cipherText = OutputTextBox.Text;
+            Key = Encoding.UTF8.GetBytes(KeyTextBox.Text);
 
-            // Convert the hexadecimal input to byte array and decrypt
+            // Convert the hexadecimal input to byte array and decrypt it
             byte[] encryptedData = ConvertHexStringToByteArray(cipherText);
-            string decryptedText = DecryptAes(encryptedData, Key, AesIV);
-
-            // Convert ASCII codes to characters
-            string plainText = ConvertHexToAscii(decryptedText);
+            byte[] decryptedData = DecryptAes(encryptedData, Key, AesIV);
+            string decryptedText = Encoding.UTF8.GetString(decryptedData);
 
             // Display the decrypted text
-            OutputTextBox.Text = plainText;
+            OutputTextBox.Text = decryptedText;
         }
 
         private void EncryptDesButton_Click(object sender, RoutedEventArgs e)
         {
             string plainText = InputTextBox.Text;
             Key = Encoding.UTF8.GetBytes(KeyTextBox.Text);
-
-            // Convert the user input to hexadecimal
-            string hexPlainText = ConvertStringToHex(plainText);
-
-            byte[] encryptedData = EncryptDes(hexPlainText, Key, DesIV);
+            byte[] encryptedData = EncryptDes(plainText, Key, DesIV);
 
             // Display the encrypted data in hexadecimal without hyphens
             OutputTextBox.Text = BitConverter.ToString(encryptedData).Replace("-", "");
@@ -79,30 +69,22 @@ namespace CryptographyWPF
         private void DecryptDesButton_Click(object sender, RoutedEventArgs e)
         {
             string cipherText = OutputTextBox.Text;
+            Key = Encoding.UTF8.GetBytes(KeyTextBox.Text);
 
-            // Convert the hexadecimal input to byte array and decrypt
+            // Convert the hexadecimal input to byte array and decrypt it
             byte[] encryptedData = ConvertHexStringToByteArray(cipherText);
             byte[] decryptedData = DecryptDes(encryptedData, Key, DesIV);
             string decryptedText = Encoding.UTF8.GetString(decryptedData);
 
-            // Convert ASCII codes to characters
-            string plainText = ConvertHexToAscii(decryptedText);
-
             // Display the decrypted text
-            OutputTextBox.Text = plainText;
+            OutputTextBox.Text = decryptedText;
         }
 
         private void EncryptTripleDesButton_Click(object sender, RoutedEventArgs e)
         {
             string plainText = InputTextBox.Text;
             Key = Encoding.UTF8.GetBytes(KeyTextBox.Text);
-
-            // Convert the user input to hexadecimal
-            string hexPlainText = ConvertStringToHex(plainText);
-
-            // Encrypt the hexadecimal representation
-            byte[] encryptedData = EncryptTripleDes(hexPlainText, Key, TripleDesIV);
-            //byte[] encryptedData = EncryptTripleDesManually(hexPlainText, Key, DesIV);
+            byte[] encryptedData = EncryptTripleDes(plainText, Key, TripleDesIV);
 
             // Display the encrypted data in hexadecimal without hyphens
             OutputTextBox.Text = BitConverter.ToString(encryptedData).Replace("-", "");
@@ -112,24 +94,15 @@ namespace CryptographyWPF
         private void DecryptTripleDesButton_Click(object sender, RoutedEventArgs e)
         {
             string cipherText = OutputTextBox.Text;
+            Key = Encoding.UTF8.GetBytes(KeyTextBox.Text);
 
-            // Convert the hexadecimal input to byte array and decrypt
+            // Convert the hexadecimal input to byte array and decrypt it
             byte[] encryptedData = ConvertHexStringToByteArray(cipherText);
-            string decryptedText = DecryptTripleDes(encryptedData, Key, TripleDesIV);
-            //string decryptedText = DecryptTripleDesManually(encryptedData, Key, DesIV);
-
-            // Convert ASCII codes to characters
-            string plainText = ConvertHexToAscii(decryptedText);
+            byte[] decryptedData = DecryptTripleDes(encryptedData, Key, TripleDesIV);
+            string decryptedText = Encoding.UTF8.GetString(decryptedData);
 
             // Display the decrypted text
-            OutputTextBox.Text = plainText;
-        }
-
-        // To convert a string to its hexadecimal representation
-        private string ConvertStringToHex(string input)
-        {
-            byte[] bytes = Encoding.UTF8.GetBytes(input);
-            return BitConverter.ToString(bytes).Replace("-", "");
+            OutputTextBox.Text = decryptedText;
         }
 
         // To convert a hexadecimal string to a byte array
@@ -144,83 +117,25 @@ namespace CryptographyWPF
                 bytes[i / 2] = Convert.ToByte(hexString.Substring(i, 2), 16);
             return bytes;
         }
+
+            //Another way to convert a hexadecimal string to a byte array
             /*Enumerable.Range(0, hexString.Length / 2)
                 .Select(i => Convert.ToByte(hexString.Substring(i * 2, 2), 16))
                 .ToArray();*/
-
-        // To convert ASCII codes to characters
-        private string ConvertHexToAscii(string hexString) =>
-            string.Concat(Enumerable.Range(0, hexString.Length / 2)
-                .Select(i => Convert.ToChar(Convert.ToInt32(hexString.Substring(i * 2, 2), 16))));
 
         private byte[] EncryptAes(string plainText, byte[] key, byte[] iv)
         {
             // Create an AES algorithm
             using (Aes aesAlg = Aes.Create())
             {
-                // Set key and IV for the AES algorithm
+                // Set key, IV, padding mode, and cipher mode for the AES algorithm
                 aesAlg.Key = key;
                 aesAlg.IV = iv;
+                aesAlg.Padding = PaddingMode.Zeros;
+                aesAlg.Mode = CipherMode.ECB;
 
                 // Create an encryptor using the key and IV
                 ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
-
-                // Create a memory stream to store the encrypted data
-                using (MemoryStream msEncrypt = new MemoryStream())
-                {
-                    // Create a CryptoStream to write the encrypted data to the memory stream
-                    using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
-                    {
-                        // Create a StreamWriter to write the plaintext to the CryptoStream
-                        using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
-                        {
-                            swEncrypt.Write(plainText);
-                        }
-                    }
-                    return msEncrypt.ToArray();
-                }
-            }
-        }
-
-        private string DecryptAes(byte[] cipherText, byte[] key, byte[] iv)
-        {
-            // Create an AES algorithm
-            using (Aes aesAlg = Aes.Create())
-            {
-                // Set key and IV for the AES algorithm
-                aesAlg.Key = key;
-                aesAlg.IV = iv;
-
-                // Create an decryptor using the key and IV
-                ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
-
-                // Create a memory stream from the input ciphertext byte array
-                using (MemoryStream msDecrypt = new MemoryStream(cipherText))
-                {
-                    // Create a CryptoStream to read the decrypted data from the memory stream
-                    using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
-                    {
-                        // Create a StreamReader to read the decrypted data from the CryptoStream
-                        using (StreamReader srDecrypt = new StreamReader(csDecrypt))
-                        {
-                            return srDecrypt.ReadToEnd();
-                        }
-                    }
-                }
-            }
-        }
-
-        private byte[] EncryptDes(string plainText, byte[] key, byte[] iv)
-        {
-            // Create an DES algorithm
-            using (DESCryptoServiceProvider desAlg = new DESCryptoServiceProvider())
-            {
-                // Set key and IV for the DES algorithm
-                desAlg.Key = key;
-                desAlg.IV = iv;
-
-                // Create an encryptor using the key and IV
-                ICryptoTransform encryptor = desAlg.CreateEncryptor(desAlg.Key, desAlg.IV);
 
                 // Convert plainText to bytes
                 byte[] plainBytes = Encoding.UTF8.GetBytes(plainText);
@@ -236,9 +151,74 @@ namespace CryptographyWPF
                     }
                     encryptedBytes = msEncrypt.ToArray();
                 }
-
                 return encryptedBytes;
             }
+        }
+
+        private byte[] DecryptAes(byte[] cipherText, byte[] key, byte[] iv)
+        {
+            // Create an AES algorithm
+            using (Aes aesAlg = Aes.Create())
+            {
+                // Set key, IV, padding mode, and cipher mode for the AES algorithm
+                aesAlg.Key = key;
+                aesAlg.IV = iv;
+                aesAlg.Padding = PaddingMode.Zeros;
+                aesAlg.Mode = CipherMode.ECB;
+
+                // Create an decryptor using the key and IV
+                ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
+
+                byte[] decryptedBytes;
+
+                // Create a memory stream from the input ciphertext byte array
+                using (MemoryStream msDecrypt = new MemoryStream(cipherText))
+                {
+                    // Create a CryptoStream to read the decrypted data from the memory stream
+                    using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                    {
+                        // Create a memory stream to store the decrypted result
+                        using (MemoryStream msResult = new MemoryStream())
+                        {
+                            csDecrypt.CopyTo(msResult);
+                            decryptedBytes = msResult.ToArray();
+                        }
+                    }
+                }
+                return decryptedBytes;
+            }
+        }
+
+        private byte[] EncryptDes(string plainText, byte[] key, byte[] iv)
+        {
+            // Create an DES algorithm
+             using (DESCryptoServiceProvider desAlg = new DESCryptoServiceProvider())
+             {
+                 // Set key, IV, padding mode, and cipher mode for the DES algorithm
+                 desAlg.Key = key;
+                 desAlg.IV = iv;
+                 desAlg.Padding = PaddingMode.Zeros;
+                 desAlg.Mode = CipherMode.ECB;
+
+                 // Create an encryptor using the key and IV
+                 ICryptoTransform encryptor = desAlg.CreateEncryptor(desAlg.Key, desAlg.IV);
+
+                 // Convert plainText to bytes
+                 byte[] plainBytes = Encoding.UTF8.GetBytes(plainText);
+                 byte[] encryptedBytes;
+
+                 // Create a memory stream to store the encrypted data
+                 using (MemoryStream msEncrypt = new MemoryStream())
+                 {
+                     // Create a CryptoStream to write the encrypted data to the memory stream
+                     using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
+                     {
+                         csEncrypt.Write(plainBytes, 0, plainBytes.Length);
+                     }
+                     encryptedBytes = msEncrypt.ToArray();
+                 }
+                 return encryptedBytes;
+             }
         }
 
         private byte[] DecryptDes(byte[] cipherText, byte[] key, byte[] iv)
@@ -246,9 +226,11 @@ namespace CryptographyWPF
             // Create an DES algorithm
             using (DESCryptoServiceProvider desAlg = new DESCryptoServiceProvider())
             {
-                // Set key and IV for the DES algorithm
+                // Set key, IV, padding mode, and cipher mode for the DES algorithm
                 desAlg.Key = key;
                 desAlg.IV = iv;
+                desAlg.Padding = PaddingMode.Zeros;
+                desAlg.Mode = CipherMode.ECB;
 
                 // Create an decryptor using the key and IV
                 ICryptoTransform decryptor = desAlg.CreateDecryptor(desAlg.Key, desAlg.IV);
@@ -278,9 +260,11 @@ namespace CryptographyWPF
             // Create a TDES algorithm
             using (TripleDESCryptoServiceProvider tdesAlg = new TripleDESCryptoServiceProvider())
             {
-                // Set key and IV for the TDES algorithm
+                // Set key, IV, padding mode, and cipher mode for the TDES algorithm
                 tdesAlg.Key = key;
                 tdesAlg.IV = iv;
+                tdesAlg.Padding = PaddingMode.Zeros;
+                tdesAlg.Mode = CipherMode.ECB;
 
                 // Create an encryptor using the key and IV
                 ICryptoTransform encryptor = tdesAlg.CreateEncryptor(tdesAlg.Key, tdesAlg.IV);
@@ -302,17 +286,21 @@ namespace CryptographyWPF
             }
         }
 
-        private string DecryptTripleDes(byte[] cipherText, byte[] key, byte[] iv)
+        private byte[] DecryptTripleDes(byte[] cipherText, byte[] key, byte[] iv)
         {
             // Create a TDES algorithm
             using (TripleDESCryptoServiceProvider tdesAlg = new TripleDESCryptoServiceProvider())
             {
-                // Set key and IV for the TDES algorithm
+                // Set key, IV, padding mode, and cipher mode for the TDES algorithm
                 tdesAlg.Key = key;
                 tdesAlg.IV = iv;
+                tdesAlg.Padding = PaddingMode.Zeros;
+                tdesAlg.Mode = CipherMode.ECB;
 
                 //Create an decryptor using the key and IV
                 ICryptoTransform decryptor = tdesAlg.CreateDecryptor(tdesAlg.Key, tdesAlg.IV);
+
+                byte[] decryptedBytes;
 
                 //Create a memory stream from the input ciphertext byte array
                 using (MemoryStream msDecrypt = new MemoryStream(cipherText))
@@ -320,25 +308,28 @@ namespace CryptographyWPF
                     //Create a CryptoStream to read the decrypted data from the memory stream
                     using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
                     {
-                        //Create a StreamReader to read the decrypted data from the CryptoStream
-                        using (StreamReader srDecrypt = new StreamReader(csDecrypt))
+                        // Create a memory stream to store the decrypted result
+                        using (MemoryStream msResult = new MemoryStream())
                         {
-                            return srDecrypt.ReadToEnd();
+                            csDecrypt.CopyTo(msResult);
+                            decryptedBytes = msResult.ToArray();
                         }
                     }
                 }
+                return decryptedBytes;
             }
         }
 
+        private byte[] cipher;
+
         private void FirstEncryptButton_Click(object sender, RoutedEventArgs e)
         {
+            // Split the full key into three parts
+            Key1 = Encoding.UTF8.GetBytes(KeyTextBoxTDES.Text.Substring(0, 8));
+            Key2 = Encoding.UTF8.GetBytes(KeyTextBoxTDES.Text.Substring(8, 8));
+            Key3 = Encoding.UTF8.GetBytes(KeyTextBoxTDES.Text.Substring(16, 8));
             string plainText = InputTextBoxTDES.Text;
-            Key = Encoding.UTF8.GetBytes(KeyTextBoxTDES.Text);
-
-            // Convert the user input to hexadecimal
-            string hexPlainText = ConvertStringToHex(plainText);
-
-            byte[] encryptedData = EncryptDes(hexPlainText, Key, DesIV);
+            byte[] encryptedData = EncryptDes(plainText, Key1, DesIV);
 
             // Display the encrypted data in hexadecimal without hyphens
             FirstCipherTextBox.Text = BitConverter.ToString(encryptedData).Replace("-", "");
@@ -351,25 +342,17 @@ namespace CryptographyWPF
 
             // Convert the hexadecimal input to byte array and decrypt
             byte[] encryptedData = ConvertHexStringToByteArray(cipherText);
-            byte[] decryptedData = DecryptDes(encryptedData, Key, DesIV);
-            string decryptedText = Encoding.UTF8.GetString(decryptedData);
+            byte[] decryptedData = DecryptDes(encryptedData, Key2, DesIV);
+            cipher = decryptedData;
 
-            // Convert ASCII codes to characters
-            string plainText = ConvertHexToAscii(decryptedText);
-
-            // Display the decrypted text
-            SecondCipherTextBox.Text = plainText;
+            // Display the decrypted data in hexadecimal without hyphens
+            SecondCipherTextBox.Text = BitConverter.ToString(decryptedData).Replace("-", ""); ;
             SecondCipherTextBox.Foreground = new SolidColorBrush(Colors.Black);
         }
 
         private void SecondEncryptButton_Click(object sender, RoutedEventArgs e)
         {
-            string plainText = SecondCipherTextBox.Text;
-
-            // Convert the user input to hexadecimal
-            string hexPlainText = ConvertStringToHex(plainText);
-
-            byte[] encryptedData = EncryptDes(hexPlainText, Key, DesIV);
+            byte[] encryptedData = EncryptDes(cipher, Key3, DesIV);
 
             // Display the encrypted data in hexadecimal without hyphens
             ThirdCipherTextBox.Text = BitConverter.ToString(encryptedData).Replace("-", "");
@@ -378,30 +361,25 @@ namespace CryptographyWPF
 
         private void SecondDecryptButton_Click(object sender, RoutedEventArgs e)
         {
+            // Split the full key into three parts
+            Key1 = Encoding.UTF8.GetBytes(KeyTextBoxTDES2.Text.Substring(0, 8));
+            Key2 = Encoding.UTF8.GetBytes(KeyTextBoxTDES2.Text.Substring(8, 8));
+            Key3 = Encoding.UTF8.GetBytes(KeyTextBoxTDES2.Text.Substring(16, 8));
             string cipherText = CipherTextBoxTDES.Text;
-            Key = Encoding.UTF8.GetBytes(KeyTextBoxTDES2.Text);
 
             // Convert the hexadecimal input to byte array and decrypt
             byte[] encryptedData = ConvertHexStringToByteArray(cipherText);
-            byte[] decryptedData = DecryptDes(encryptedData, Key, DesIV);
-            string decryptedText = Encoding.UTF8.GetString(decryptedData);
+            byte[] decryptedData = DecryptDes(encryptedData, Key3, DesIV);
+            cipher = decryptedData;
 
-            // Convert ASCII codes to characters
-            string plainText = ConvertHexToAscii(decryptedText);
-
-            // Display the decrypted text
-            FirstResultTextBox.Text = plainText;
+            // Display the decrypted data in hexadecimal without hyphens
+            FirstResultTextBox.Text = BitConverter.ToString(decryptedData).Replace("-", "");
             FirstResultTextBox.Foreground = new SolidColorBrush(Colors.Black);
         }
 
         private void ThirdEncryptButton_Click(object sender, RoutedEventArgs e)
         {
-            string plainText = FirstResultTextBox.Text;
-
-            // Convert the user input to hexadecimal
-            string hexPlainText = ConvertStringToHex(plainText);
-
-            byte[] encryptedData = EncryptDes(hexPlainText, Key, DesIV);
+            byte[] encryptedData = EncryptDes(cipher, Key2, DesIV);
 
             // Display the encrypted data in hexadecimal without hyphens
             SecondResultTextBox.Text = BitConverter.ToString(encryptedData).Replace("-", "");
@@ -414,15 +392,42 @@ namespace CryptographyWPF
 
             // Convert the hexadecimal input to byte array and decrypt
             byte[] encryptedData = ConvertHexStringToByteArray(cipherText);
-            byte[] decryptedData = DecryptDes(encryptedData, Key, DesIV);
+            byte[] decryptedData = DecryptDes(encryptedData, Key1, DesIV);
             string decryptedText = Encoding.UTF8.GetString(decryptedData);
 
-            // Convert ASCII codes to characters
-            string plainText = ConvertHexToAscii(decryptedText);
-
             // Display the decrypted text
-            ThirdResultTextBox.Text = plainText;
+            ThirdResultTextBox.Text = decryptedText;
             ThirdResultTextBox.Foreground = new SolidColorBrush(Colors.Black);
+        }
+
+        private byte[] EncryptDes(byte[] plainBytes, byte[] key, byte[] iv)
+        {
+            // Create an DES algorithm
+            using (DESCryptoServiceProvider desAlg = new DESCryptoServiceProvider())
+            {
+                // Set key, IV, padding mode, and cipher mode for the DES algorithm
+                desAlg.Key = key;
+                desAlg.IV = iv;
+                desAlg.Padding = PaddingMode.Zeros;
+                desAlg.Mode = CipherMode.ECB;
+
+                // Create an encryptor using the key and IV
+                ICryptoTransform encryptor = desAlg.CreateEncryptor(desAlg.Key, desAlg.IV);
+
+                byte[] encryptedBytes;
+
+                // Create a memory stream to store the encrypted data
+                using (MemoryStream msEncrypt = new MemoryStream())
+                {
+                    // Create a CryptoStream to write the encrypted data to the memory stream
+                    using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
+                    {
+                        csEncrypt.Write(plainBytes, 0, plainBytes.Length);
+                    }
+                    encryptedBytes = msEncrypt.ToArray();
+                }
+                return encryptedBytes;
+            }
         }
 
         private void InputTextBox_LostFocus(object sender, RoutedEventArgs e)
@@ -520,5 +525,6 @@ namespace CryptographyWPF
             KeyTextBoxTDES2.Visibility = Visibility.Visible;
             KeyTextBoxTDES2.Focus();
         }
+
     }
 }
