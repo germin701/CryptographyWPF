@@ -45,14 +45,19 @@ namespace CryptographyWPF
         {
             string cipherText = OutputTextBox.Text;
             Key = Encoding.UTF8.GetBytes(KeyTextBox.Text);
-
-            // Convert the hexadecimal input to byte array and decrypt it
-            byte[] encryptedData = ConvertHexStringToByteArray(cipherText);
-            byte[] decryptedData = DecryptAes(encryptedData, Key, AesIV);
-            string decryptedText = Encoding.UTF8.GetString(decryptedData);
+            string decryptedText = AES(cipherText, Key, AesIV);
 
             // Display the decrypted text
             OutputTextBox.Text = decryptedText;
+        }
+
+        private string AES(string cipherText, byte[] Key, byte[] IV)
+        {
+            // Convert the hexadecimal input to byte array and decrypt it
+            byte[] encryptedData = ConvertHexStringToByteArray(cipherText);
+            byte[] decryptedData = DecryptAes(encryptedData, Key, IV);
+            string decryptedText = Encoding.UTF8.GetString(decryptedData);
+            return decryptedText;
         }
 
         private void EncryptDesButton_Click(object sender, RoutedEventArgs e)
@@ -70,14 +75,19 @@ namespace CryptographyWPF
         {
             string cipherText = OutputTextBox.Text;
             Key = Encoding.UTF8.GetBytes(KeyTextBox.Text);
-
-            // Convert the hexadecimal input to byte array and decrypt it
-            byte[] encryptedData = ConvertHexStringToByteArray(cipherText);
-            byte[] decryptedData = DecryptDes(encryptedData, Key, DesIV);
-            string decryptedText = Encoding.UTF8.GetString(decryptedData);
+            string decryptedText = DES(cipherText, Key, DesIV);
 
             // Display the decrypted text
             OutputTextBox.Text = decryptedText;
+        }
+
+        private string DES(string cipherText, byte[] Key, byte[] IV)
+        {
+            // Convert the hexadecimal input to byte array and decrypt it
+            byte[] encryptedData = ConvertHexStringToByteArray(cipherText);
+            byte[] decryptedData = DecryptDes(encryptedData, Key, IV);
+            string decryptedText = Encoding.UTF8.GetString(decryptedData);
+            return decryptedText;
         }
 
         private void EncryptTripleDesButton_Click(object sender, RoutedEventArgs e)
@@ -95,14 +105,19 @@ namespace CryptographyWPF
         {
             string cipherText = OutputTextBox.Text;
             Key = Encoding.UTF8.GetBytes(KeyTextBox.Text);
-
-            // Convert the hexadecimal input to byte array and decrypt it
-            byte[] encryptedData = ConvertHexStringToByteArray(cipherText);
-            byte[] decryptedData = DecryptTripleDes(encryptedData, Key, TripleDesIV);
-            string decryptedText = Encoding.UTF8.GetString(decryptedData);
+            string decryptedText = TDES(cipherText, Key, TripleDesIV);
 
             // Display the decrypted text
             OutputTextBox.Text = decryptedText;
+        }
+
+        private string TDES(string cipherText, byte[] Key, byte[] IV)
+        {
+            // Convert the hexadecimal input to byte array and decrypt it
+            byte[] encryptedData = ConvertHexStringToByteArray(cipherText);
+            byte[] decryptedData = DecryptTripleDes(encryptedData, Key, IV);
+            string decryptedText = Encoding.UTF8.GetString(decryptedData);
+            return decryptedText;
         }
 
         // To convert a hexadecimal string to a byte array
